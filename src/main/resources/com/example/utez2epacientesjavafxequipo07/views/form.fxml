@@ -24,7 +24,7 @@
                 <TextField fx:id="txtTitulo" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <Label text="Año de publicación" GridPane.rowIndex="3" />
-                <TextField fx:id="txtCampoAge" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField fx:id="txtCampoYear" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label text="ID" />
             <Label text="Género" GridPane.rowIndex="4" />
             <TextField GridPane.columnIndex="1" />

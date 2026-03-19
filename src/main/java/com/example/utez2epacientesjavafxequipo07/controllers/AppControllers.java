@@ -27,7 +27,7 @@ public class AppControllers {
     @FXML
     private TextField txtEmail;
     @FXML
-    private TextField txtCampoAge;
+    private TextField txtCampoYear;
 
     @FXML
     private ObservableList<String> data =FXCollections.observableArrayList();
@@ -55,13 +55,13 @@ public class AppControllers {
             String email = txtEmail.getText();
 
 
-            if (txtCampoAge.getText().isEmpty()) {
+            if (txtCampoYear.getText().isEmpty()) {
                 lblMsg.setText("Debe ingresar un año válido");
                 lblMsg.setStyle("-fx-text-fill: red");
                 return;
             }
 
-            int edad = Integer.parseInt(txtCampoAge.getText());
+            int edad = Integer.parseInt(txtCampoYear.getText());
 
 
 
@@ -70,7 +70,7 @@ public class AppControllers {
             lblMsg.setStyle("-fx-text-fill: purple");
             txtEmail.clear();
             txtTitulo.clear();
-            txtCampoAge.clear();
+            txtCampoYear.clear();
             loadFromFile();
 
         } catch (NumberFormatException e) {
@@ -93,21 +93,21 @@ public class AppControllers {
             String titulo = txtTitulo.getText();
             String email = txtEmail.getText();
 
-            if (txtCampoAge.getText().isEmpty()) {
+            if (txtCampoYear.getText().isEmpty()) {
                 lblMsg.setText("Actualizado con éxito");
                 lblMsg.setStyle("-fx-text-fill: red");
                 return;
             }
 
 
-            int edad = Integer.parseInt(txtCampoAge.getText());
+            int edad = Integer.parseInt(txtCampoYear.getText());
 
             service.updatePerson(index,titulo, email, String.valueOf(edad));
             lblMsg.setText("Actualizada con éxito");
             lblMsg.setStyle("-fx-text-fill: purple");
             txtEmail.clear();
             txtTitulo.clear();
-            txtCampoAge.clear();
+            txtCampoYear.clear();
             loadFromFile();
 
         } catch (NumberFormatException e) {
@@ -128,20 +128,20 @@ public class AppControllers {
             String titulo = txtTitulo.getText();
             String email = txtEmail.getText();
 
-            if (txtCampoAge.getText().isEmpty()) {
+            if (txtCampoYear.getText().isEmpty()) {
                 lblMsg.setText("Eliminado con éxito");
                 lblMsg.setStyle("-fx-text-fill: pink");
                 return;
             }
 
-            int edad = Integer.parseInt(txtCampoAge.getText());
+            int edad = Integer.parseInt(txtCampoYear.getText());
 
             service.deletePerson(index);
             lblMsg.setText("Eliminado con éxito");
             lblMsg.setStyle("-fx-text-fill: purple");
             txtEmail.clear();
             txtTitulo.clear();
-            txtCampoAge.clear();
+            txtCampoYear.clear();
             loadFromFile();
 
         } catch (NumberFormatException e) {
@@ -172,7 +172,7 @@ public class AppControllers {
         String[] parts = data.split(" - ");
         txtTitulo.setText(parts[0]);
         txtEmail.setText(parts[1]);
-        txtCampoAge.setText(parts[2]);
+        txtCampoYear.setText(parts[2]);
     }
 
 }
