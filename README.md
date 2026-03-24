@@ -24,4 +24,5 @@ Al finalizar, se hace merge de dev a main para la entrega.
 Integrantes
 Nombre          Apellido        Usuario de git
 Lian            Ramirez         20253ds124-collab
+Marina          Flores          20253ds141MR  
 
