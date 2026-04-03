@@ -6,14 +6,14 @@
 <VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.utez2epacientesjavafxequipo07.controllers.AppControllers">
     <children>
         <Label alignment="TOP_CENTER" text="CATÁLOGO DE LIBROS" textAlignment="CENTER" />
-        <TableView layoutX="200.0" layoutY="20.0" prefHeight="200.0" prefWidth="200.0">
+        <TableView fx:id="tablaLibros" layoutX="200.0" layoutY="20.0" prefHeight="200.0" prefWidth="200.0">
             <columns>
-                <TableColumn prefWidth="75.0" text="ID" />
-                <TableColumn prefWidth="169.79998016357422" text="Título" />
-                <TableColumn prefWidth="131.20001220703125" text="Autor" />
-                <TableColumn prefWidth="60.0" text="Año" />
-                <TableColumn prefWidth="86.00003051757812" text="Género" />
-                <TableColumn prefWidth="79.20001220703125" text="Disponible" />
+                <TableColumn fx:id="colID" prefWidth="75.0" text="ID" />
+                <TableColumn fx:id="colTitulo" prefWidth="169.79998016357422" text="Título" />
+                <TableColumn fx:id="colAutor" prefWidth="131.20001220703125" text="Autor" />
+                <TableColumn fx:id="colAnio" prefWidth="60.0" text="Año" />
+                <TableColumn fx:id="colGenero" prefWidth="86.00003051757812" text="Género" />
+                <TableColumn fx:id="colDisponible" prefWidth="79.20001220703125" text="Disponible" />
             </columns>
         </TableView>
         <Button mnemonicParsing="false" text="Nuevo" />

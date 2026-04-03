@@ -1,5 +1,6 @@
 package com.example.utez2epacientesjavafxequipo07.services;
 
+import com.example.utez2epacientesjavafxequipo07.model.Libro;
 import com.example.utez2epacientesjavafxequipo07.repositories.BooksFileRepository;
 import com.example.utez2epacientesjavafxequipo07.repositories.BooksFileRepository;
 
@@ -67,24 +68,26 @@ public class BooksService {
         return cleanLines;
     }
 
-    public void addPerson(String titulo, String email, int edad) throws IOException {
-        validate(titulo, email, edad);
-        repo.appenNewLine(titulo+","+ email + ","+ edad);
+    public void addLibro (Libro libro) throws IOException {
+     validate(libro);
+     repo.appenNewLine(
+             libro.getIsbn() + "," +
+                     libro.getTitulo() + "," +
+                     libro.getAutor() + "," +
+                     libro.getAnio() + "," +
+                     libro.getGenero() + "," +
+                     libro.isDisponible()
+     );
     }
 
-    private void validate(String titulo, String email, int edad) throws IOException {
-        if(titulo==null||titulo.isBlank()||titulo.length()<3){
-            throw new IllegalArgumentException("El nombre es obligatorio");
-        }
+    private void validate(Libro libro) throws IOException {
+       if(libro.getTitulo().length() <3) throw new IllegalArgumentException("Titulo muy corto");
 
-        String em=(email==null)? "" : email.trim();
-        if(em.isEmpty()|| !em.contains("@") || !em.contains(".")){
-            throw new IllegalArgumentException("El email es obligatorio");
-        }
+       if (libro.getAutor().length() <3) throw new IllegalArgumentException("Autor muy corto");
 
-        if (edad < 18||edad > 120) {
-            throw new IllegalArgumentException("El edad es obligatorio");
-        }
+       int currentYear = java.time.Year.now().getValue();
+
+       if (libro.getAnio() < 1500 || libro.getAnio() > currentYear) throw new IllegalArgumentException("Año inválido");
 
     }
 

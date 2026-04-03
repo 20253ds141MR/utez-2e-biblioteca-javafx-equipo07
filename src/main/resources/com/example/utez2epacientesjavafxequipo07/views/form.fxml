@@ -20,7 +20,7 @@
             </rowConstraints>
             <children>
                 <Label text="Titulo" GridPane.rowIndex="1" />
-                <Label text="Email" GridPane.rowIndex="2" />
+                <Label text="Email del Autor" GridPane.rowIndex="2" />
                 <TextField fx:id="txtTitulo" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <Label text="Año de publicación" GridPane.rowIndex="3" />

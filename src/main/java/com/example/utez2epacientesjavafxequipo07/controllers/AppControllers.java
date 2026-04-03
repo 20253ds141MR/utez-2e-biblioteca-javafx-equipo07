@@ -1,5 +1,6 @@
 package com.example.utez2epacientesjavafxequipo07.controllers;
 
+import com.example.utez2epacientesjavafxequipo07.model.Libro;
 import com.example.utez2epacientesjavafxequipo07.services.BooksService;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
@@ -7,28 +8,25 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 
+import java.awt.print.Book;
 import java.io.IOException;
 import java.util.List;
 
 
 public class AppControllers {
 
-    @FXML
-    private Label lblMsg;
-    @FXML
-    private ListView<String> listView;
-    @FXML
-    private TextField txtTitulo;
-    @FXML
-    private TextField txtEmail;
-    @FXML
-    private TextField txtCampoYear;
+    @FXML private TableView<Libro> tablaLibros;
 
+   @FXML private TableColumn<Libro,String> colID;
+   @FXML private TableColumn<Libro,String> colTitulo;
+   @FXML private TableColumn<Libro,String> colAutor;
+   @FXML private TableColumn<Libro,String> colAnio;
+   @FXML private TableColumn<Libro,String> colGenero;
+   @FXML private TableColumn<Libro,String> colDisponible;
     @FXML
     private ObservableList<String> data =FXCollections.observableArrayList();
 
@@ -36,143 +34,44 @@ public class AppControllers {
     private BooksService service = new BooksService();
     @FXML
     public void initialize(){
-        loadFromFile();
-        listView.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
-                    loadDataToForm(newValue);
-                }
-        );
-        listView.setItems(data);
+       colID.setCellValueFactory(new PropertyValueFactory<>("isbn"));
+       colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
+       colAutor.setCellValueFactory(new PropertyValueFactory<>("autor"));
+       colAnio.setCellValueFactory(new PropertyValueFactory<>("año"));
+       colGenero.setCellValueFactory(new PropertyValueFactory<>("género"));
+       colDisponible.setCellValueFactory(new PropertyValueFactory<>("disponible"));
+
+       cargarTabla();
     }
 
-    @FXML
-    public void onReload(){
-        loadFromFile();
-    }
-    @FXML
-    public void onAdd() {
-        try {
-            String titulo = txtTitulo.getText();
-            String email = txtEmail.getText();
-
-
-            if (txtCampoYear.getText().isEmpty()) {
-                lblMsg.setText("Debe ingresar un año válido");
-                lblMsg.setStyle("-fx-text-fill: red");
-                return;
-            }
-
-            int edad = Integer.parseInt(txtCampoYear.getText());
 
 
 
-            service.addPerson(titulo, email, edad);
-            lblMsg.setText("Libro creado con éxito");
-            lblMsg.setStyle("-fx-text-fill: purple");
-            txtEmail.clear();
-            txtTitulo.clear();
-            txtCampoYear.clear();
-            loadFromFile();
-
-        } catch (NumberFormatException e) {
-            lblMsg.setText("La edad debe ser un número válido");
-            lblMsg.setStyle("-fx-text-fill: red");
-        } catch (IOException e) {
-            lblMsg.setText("Error en el archivo");
-            lblMsg.setStyle("-fx-text-fill: red");
-        } catch (IllegalArgumentException e) {
-            lblMsg.setText("Error en los datos");
-            lblMsg.setStyle("-fx-text-fill: red");
-        }
 
 
-    }
 
-    public void OnUpdate(){
-        try {
-            int index = listView.getSelectionModel().getSelectedIndex();
-            String titulo = txtTitulo.getText();
-            String email = txtEmail.getText();
+    private void cargarTabla(){
+       try {
+           List<String> lines = service.loadDataForListView();
+           ObservableList<Libro> lista = FXCollections.observableArrayList();
+           for (String line : lines) {
+               String[] data = line.split(",");
 
-            if (txtCampoYear.getText().isEmpty()) {
-                lblMsg.setText("Actualizado con éxito");
-                lblMsg.setStyle("-fx-text-fill: red");
-                return;
-            }
+               Libro libro = new Libro(
+                       parts[0], //ID
+                       parts[1], //titulo
+                       parts[2], //autor
+                       Integer.parseInt(parts[3]),
+                       parts[4],
+                       Boolean.parseBoolean(parts[5])
+               );
+               lista.add(libro);
+           }
+           tablaLibros.setItems(lista);
 
-
-            int edad = Integer.parseInt(txtCampoYear.getText());
-
-            service.updatePerson(index,titulo, email, String.valueOf(edad));
-            lblMsg.setText("Actualizada con éxito");
-            lblMsg.setStyle("-fx-text-fill: purple");
-            txtEmail.clear();
-            txtTitulo.clear();
-            txtCampoYear.clear();
-            loadFromFile();
-
-        } catch (NumberFormatException e) {
-            lblMsg.setText("La edad debe ser un número válido");
-            lblMsg.setStyle("-fx-text-fill: red");
-        } catch (IOException e) {
-            lblMsg.setText("Error en el archivo");
-            lblMsg.setStyle("-fx-text-fill: red");
-        } catch (IllegalArgumentException e) {
-            lblMsg.setText("Error en los datos");
-            lblMsg.setStyle("-fx-text-fill: red");
-        }
-    }
-
-    public void OnDelete(){
-        try {
-            int index = listView.getSelectionModel().getSelectedIndex();
-            String titulo = txtTitulo.getText();
-            String email = txtEmail.getText();
-
-            if (txtCampoYear.getText().isEmpty()) {
-                lblMsg.setText("Eliminado con éxito");
-                lblMsg.setStyle("-fx-text-fill: pink");
-                return;
-            }
-
-            int edad = Integer.parseInt(txtCampoYear.getText());
-
-            service.deletePerson(index);
-            lblMsg.setText("Eliminado con éxito");
-            lblMsg.setStyle("-fx-text-fill: purple");
-            txtEmail.clear();
-            txtTitulo.clear();
-            txtCampoYear.clear();
-            loadFromFile();
-
-        } catch (NumberFormatException e) {
-            lblMsg.setText("La edad debe ser un número válido");
-            lblMsg.setStyle("-fx-text-fill: red");
-        } catch (IOException e) {
-            lblMsg.setText("Error en el archivo");
-            lblMsg.setStyle("-fx-text-fill: red");
-        } catch (IllegalArgumentException e) {
-            lblMsg.setText("Error en los datos");
-            lblMsg.setStyle("-fx-text-fill: red");
-        }
-    }
-
-    private void loadFromFile () {
-        try {
-            List<String> items = service.loadDataForListView();
-            data.setAll(items);
-
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    private void loadDataToForm(String data){
-        String[] parts = data.split(" - ");
-        txtTitulo.setText(parts[0]);
-        txtEmail.setText(parts[1]);
-        txtCampoYear.setText(parts[2]);
+       } catch (Exception e){
+           lblMsg.setText("Error al cargar tabla");
+       }
     }
 
 }
