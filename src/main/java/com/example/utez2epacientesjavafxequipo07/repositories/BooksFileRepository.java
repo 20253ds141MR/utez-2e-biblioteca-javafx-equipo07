@@ -9,7 +9,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 public class BooksFileRepository {
-    private final Path filePath = Paths.get(System.getProperty("user.dir"), "data","books.csv");
+    private final Path filePath = Paths.get(System.getProperty("user.dir"),"data","books.csv");
 
     private void ensureFile() throws IOException {
         if (Files.notExists(filePath.getParent())) {
@@ -32,9 +32,9 @@ public class BooksFileRepository {
         Files.writeString(filePath, line + System.lineSeparator(), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
     }
 
-    public void saveFile(List <String> line) throws IOException {
+    public void saveFile(List <String> lines) throws IOException {
         ensureFile();
-        Files.write(filePath, line, StandardCharsets.UTF_8,StandardOpenOption.TRUNCATE_EXISTING);
+        Files.write(filePath, lines, StandardCharsets.UTF_8,StandardOpenOption.TRUNCATE_EXISTING);
 
     }
 }
