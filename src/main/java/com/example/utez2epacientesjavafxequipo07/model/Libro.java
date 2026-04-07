@@ -2,15 +2,15 @@ package com.example.utez2epacientesjavafxequipo07.model;
 import java.util.Scanner;
 
 public class Libro {
-    private String isbn;
+    private String id;
     private String titulo;
     private String autor;
     private int anio;
     private String genero;
     private boolean disponible;
 
-    public Libro(String isbn, String titulo, String autor, int anio, String genero, boolean disponible) {
-        this.isbn = isbn;
+    public Libro(String id, String titulo, String autor, int anio, String genero, boolean disponible) {
+        this.id = id;
         this.titulo = titulo;
         this.autor = autor;
         this.anio = anio;
@@ -18,12 +18,12 @@ public class Libro {
         this.disponible = disponible;
     }
 
-    public String getIsbn() {
-        return isbn;
+    public String getId() {
+        return id;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitulo() {
@@ -64,5 +64,9 @@ public class Libro {
 
     public void setDisponible(boolean disponible) {
         this.disponible = disponible;
+    }
+
+    public String[] split(String s) {
+        return s.split(",");
     }
 }

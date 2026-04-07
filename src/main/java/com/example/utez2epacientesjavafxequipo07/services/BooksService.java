@@ -4,7 +4,9 @@ import com.example.utez2epacientesjavafxequipo07.model.Libro;
 import com.example.utez2epacientesjavafxequipo07.repositories.BooksFileRepository;
 import com.example.utez2epacientesjavafxequipo07.repositories.BooksFileRepository;
 
+import javax.swing.text.StyledEditorKit;
 import java.io.IOException;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,46 +16,71 @@ public class BooksService {
     BooksFileRepository repo = new BooksFileRepository();
 
     //Logica de negocio (EXAMEN)
-    public List<String> loadDataForListView() throws IOException {
+    public List<Libro> getLibros() throws IOException{
+        List<String> lines = repo.readAllLines();
+        List<Libro> libros = new ArrayList<>();
 
-        List<String> lines= repo.readAllLines();
-        List<String> result= new ArrayList<>();
+       for(int i = 0; i < lines.size(); i++){
+           String line = lines.get(i);
+           if(line==null||line.isBlank()){
+           continue;
+           }
 
+           String[] split = line.split(";");
+           if(split.length<6) continue;
 
-
-        //Devuelve un arreglo separado por comas
-        for(String line:lines){
-            if(line==null||line.isBlank())continue;
-
-            String[] parts = line.split(",");
-            String titulo = parts[0];
-            String email = parts[1];
-            int edad = Integer.parseInt(parts[2]);
-            result.add(titulo +" - "+ email+" - "+ edad);
-        }
-        return result;
+           libros.add(new Libro(
+                   split[0],
+                   split[1],
+                   split[2],
+                   Integer.parseInt(split[3]),
+                   split[4],
+                   Boolean.parseBoolean(split[5])
+           ));
+       }
+        return libros;
     }
 
-    public void updatePerson(int index, String titulo, String email, String edad) throws IOException {
-        validate(titulo,email, Integer.parseInt(edad));
-        if(index<0) {
-            throw new IllegalArgumentException("El indice es inválido");
-        }
-        List<String> data=getCleanLines();
-        data.set(index,titulo+","+email+","+edad);
-        repo.saveFile(data);
-    }
+    public void addLibro (String id, String titulo, String autor, int anio, String genero, boolean disponible) throws IOException{
 
-    public void deletePerson(int index) throws IOException {
+        validate(id, titulo, autor, anio);
         List<String> data = getCleanLines();
 
-        if (index < 0 || index >= data.size()) {
-            throw new IllegalArgumentException("El índice es inválido o está fuera de rango");
+        for(String line : data){
+            String[] parts = line.split(",");
+            if(parts[0].equals(id)){
+                throw new IllegalArgumentException("El ID ya existe");
+            }
         }
-        data.remove(index);
-        repo.saveFile(data);
+
+        repo.appendNewLine(id + "," + titulo + "," + autor + "," + anio + "," + genero + "," + disponible);
+
     }
 
+  public void updateLibro(int index, String id, String titulo, String autor, int anio, String genero, boolean disponible) throws IOException{
+
+        validate(id,titulo,autor,anio);
+
+        List<String> data = getCleanLines();
+        if(index < 0 || index >= data.size()){
+            throw new IllegalArgumentException("inválido");
+        }
+
+       String lineaActualizada = id + "," + titulo + "," + autor +"," + anio + "," + genero + "," + disponible;
+        data.set(index + 1, lineaActualizada);
+
+        repo.saveFile(data);
+  }
+
+  public void deleteLibro(int index) throws IOException{
+        List<String> data = getCleanLines();
+        if(index < 0 || index >= data.size()){
+            throw new IllegalArgumentException("inválido");
+        }
+
+        data.remove(index + 1);
+        repo.saveFile(data);
+  }
 
     private List<String> getCleanLines() throws IOException {
         List<String> lines= repo.readAllLines();
@@ -68,27 +95,27 @@ public class BooksService {
         return cleanLines;
     }
 
-    public void addLibro (Libro libro) throws IOException {
-     validate(libro);
-     repo.appenNewLine(
-             libro.getIsbn() + "," +
-                     libro.getTitulo() + "," +
-                     libro.getAutor() + "," +
-                     libro.getAnio() + "," +
-                     libro.getGenero() + "," +
-                     libro.isDisponible()
-     );
-    }
 
-    private void validate(Libro libro) throws IOException {
-       if(libro.getTitulo().length() <3) throw new IllegalArgumentException("Titulo muy corto");
 
-       if (libro.getAutor().length() <3) throw new IllegalArgumentException("Autor muy corto");
+    private void validate(String id, String titulo, String autor, int anio) {
 
-       int currentYear = java.time.Year.now().getValue();
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID obligatorio");
+        }
 
-       if (libro.getAnio() < 1500 || libro.getAnio() > currentYear) throw new IllegalArgumentException("Año inválido");
+        if (titulo == null || titulo.length() < 3) {
+            throw new IllegalArgumentException("Título muy corto");
+        }
 
+        if (autor == null || autor.length() < 3) {
+            throw new IllegalArgumentException("Autor muy corto");
+        }
+
+        int currentYear = Year.now().getValue();
+
+        if (anio < 1500 || anio > currentYear) {
+            throw new IllegalArgumentException("Año inválido");
+        }
     }
 
 

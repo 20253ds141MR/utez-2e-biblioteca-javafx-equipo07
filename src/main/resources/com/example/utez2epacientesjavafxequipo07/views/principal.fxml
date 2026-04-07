@@ -3,23 +3,62 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.utez2epacientesjavafxequipo07.controllers.AppControllers">
-    <children>
-        <Label alignment="TOP_CENTER" text="CATÁLOGO DE LIBROS" textAlignment="CENTER" />
-        <TableView fx:id="tablaLibros" layoutX="200.0" layoutY="20.0" prefHeight="200.0" prefWidth="200.0">
-            <columns>
-                <TableColumn fx:id="colID" prefWidth="75.0" text="ID" />
-                <TableColumn fx:id="colTitulo" prefWidth="169.79998016357422" text="Título" />
-                <TableColumn fx:id="colAutor" prefWidth="131.20001220703125" text="Autor" />
-                <TableColumn fx:id="colAnio" prefWidth="60.0" text="Año" />
-                <TableColumn fx:id="colGenero" prefWidth="86.00003051757812" text="Género" />
-                <TableColumn fx:id="colDisponible" prefWidth="79.20001220703125" text="Disponible" />
-            </columns>
-        </TableView>
-        <Button mnemonicParsing="false" text="Nuevo" />
-        <Button mnemonicParsing="false" text="Editar" />
-        <Button mnemonicParsing="false" text="Eliminar" />
-        <Button mnemonicParsing="false" text="Ver detalle" />
-        <Button mnemonicParsing="false" text="Exportar reporte" />
-    </children>
+<VBox spacing="10"
+      alignment="TOP_CENTER"
+      prefWidth="800"
+      prefHeight="600"
+      xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.utez2epacientesjavafxequipo07.controllers.AppControllers">
+
+    <Label text="CATÁLOGO DE LIBROS"
+           style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+    <!-- TABLA -->
+    <TableView fx:id="tablaLibros" prefHeight="250">
+        <columns>
+            <TableColumn fx:id="colID" text="ID" prefWidth="80"/>
+            <TableColumn fx:id="colTitulo" text="Título" prefWidth="150"/>
+            <TableColumn fx:id="colAutor" text="Autor" prefWidth="130"/>
+            <TableColumn fx:id="colAnio" text="Año" prefWidth="70"/>
+            <TableColumn fx:id="colGenero" text="Género" prefWidth="120"/>
+            <TableColumn fx:id="colDisponible" text="Disponible" prefWidth="90"/>
+        </columns>
+    </TableView>
+
+
+    <GridPane hgap="10" vgap="10">
+
+
+        <Label text="ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtID" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+
+        <Label text="Título:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtTitulo" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+
+
+        <Label text="Autor:" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <TextField fx:id="txtAutor" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Año:" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <TextField fx:id="txtAnio" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <!-- COLUMNA 3 -->
+        <Label text="Género:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtGenero" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+
+        <CheckBox fx:id="chkDisponible"
+                  text="Disponible"
+                  GridPane.rowIndex="3"
+                  GridPane.columnIndex="2"/>
+    </GridPane>
+
+    <Label fx:id="lblMsg"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Nuevo" onAction="#nuevo" />
+        <Button text="Editar"  onAction="#eliminar"/>
+        <Button text="Exportar reporte"/>
+    </HBox>
+
 </VBox>

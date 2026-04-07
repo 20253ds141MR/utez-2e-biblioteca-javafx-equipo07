@@ -9,10 +9,13 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 public class BooksFileRepository {
-    private final Path filePath = Paths.get("data", "books.csv");
+    private final Path filePath = Paths.get(System.getProperty("user.dir"), "data","books.csv");
 
     private void ensureFile() throws IOException {
-        if (Files.notExists(filePath)) {
+        if (Files.notExists(filePath.getParent())) {
+            Files.createDirectories(filePath.getParent());
+        }
+        if(Files.notExists(filePath)) {
             Files.createFile(filePath);
         }
     }
@@ -20,18 +23,18 @@ public class BooksFileRepository {
     //extrae los datos del archivo en listado
     public List<String> readAllLines() throws IOException {
         ensureFile();
-        return Files.readAllLines(filePath);
+        return Files.readAllLines(filePath, StandardCharsets.UTF_8);
 
     }
 
-    public void appenNewLine(String line) throws IOException {
+    public void appendNewLine(String line) throws IOException {
         ensureFile();
         Files.writeString(filePath, line + System.lineSeparator(), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
     }
 
     public void saveFile(List <String> line) throws IOException {
         ensureFile();
-        Files.write(filePath, line, StandardCharsets.UTF_8);
-        StandardOpenOption truncateExisting = StandardOpenOption.TRUNCATE_EXISTING;
+        Files.write(filePath, line, StandardCharsets.UTF_8,StandardOpenOption.TRUNCATE_EXISTING);
+
     }
 }
