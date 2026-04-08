@@ -222,7 +222,7 @@ public class AppControllers {
         try {
             ReportExport reporte = new ReportExport();
             reporte.exportar(service.getLibros());
-            mostrarMensaje("Reporte exportado: reporte_catalogo.csv", "green");
+            mostrarMensaje("Reporte exportado: data/reporte_catalogo.csv", "green");
         } catch (Exception e) {
             e.printStackTrace();
             mostrarMensaje("Error al exportar reporte", "red");
