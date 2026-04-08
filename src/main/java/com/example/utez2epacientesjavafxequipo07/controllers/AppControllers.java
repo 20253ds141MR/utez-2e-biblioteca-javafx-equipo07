@@ -1,6 +1,7 @@
 package com.example.utez2epacientesjavafxequipo07.controllers;
 
 import com.example.utez2epacientesjavafxequipo07.model.Libro;
+import com.example.utez2epacientesjavafxequipo07.model.ReportExport;
 import com.example.utez2epacientesjavafxequipo07.services.BooksService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,7 +37,7 @@ public class AppControllers {
    private final BooksService service = new BooksService();
 
     @FXML
-    public void initialize() throws IOException {
+    public void initialize() {
         //Utilización de lambdas para la visualización de libros en el ListView
         try {
             colID.setCellValueFactory(c ->
@@ -214,6 +215,18 @@ public class AppControllers {
     @FXML
     private void actualizarTabla(){
         cargarTabla();
+    }
+
+    @FXML
+    private void exportarReporte() {
+        try {
+            ReportExport reporte = new ReportExport();
+            reporte.exportar(service.getLibros());
+            mostrarMensaje("Reporte exportado: reporte_catalogo.csv", "green");
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarMensaje("Error al exportar reporte", "red");
+        }
     }
 }
 

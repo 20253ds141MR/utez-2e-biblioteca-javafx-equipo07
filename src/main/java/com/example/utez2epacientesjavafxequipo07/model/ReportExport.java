@@ -8,11 +8,18 @@ import java.util.List;
 public class ReportExport {
 
     public void exportar(List<Libro> libros) throws IOException {
-
-        BufferedWriter writer= new BufferedWriter(new FileWriter("reporteCatalogo.csv"));
-        writer.write("ID,Titulo,Autor,Anio,Genero,Disponible");
-        writer.newLine();
-
-
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("reporte_catalogo.csv"))) {
+            writer.write("ID,Titulo,Autor,Anio,Genero,Disponible");
+            writer.newLine();
+            for (Libro libro : libros) {
+                writer.write(libro.getId() + "," +
+                        libro.getTitulo() + "," +
+                        libro.getAutor() + "," +
+                        libro.getAnio() + "," +
+                        libro.getGenero() + "," +
+                        libro.isDisponible());
+                writer.newLine();
+            }
+        }
     }
 }
