@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" prefHeight="600" prefWidth="800" spacing="10" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.utez2epacientesjavafxequipo07.controllers.AppControllers">
+
+    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="CATÁLOGO DE LIBROS" />
+
+    <!-- TABLA -->
+    <TableView fx:id="tablaLibros" prefHeight="396.0" prefWidth="800.0">
+        <columns>
+            <TableColumn fx:id="colID" prefWidth="80" text="ID" />
+            <TableColumn fx:id="colTitulo" prefWidth="150" text="Título" />
+            <TableColumn fx:id="colAutor" prefWidth="130" text="Autor" />
+            <TableColumn fx:id="colAnio" prefWidth="70" text="Año" />
+            <TableColumn fx:id="colGenero" prefWidth="120" text="Género" />
+            <TableColumn fx:id="colDisponible" prefWidth="90" text="Disponible" />
+        </columns>
+    </TableView>
+
+    <Label fx:id="lblMsg" />
+
+    <HBox alignment="CENTER" spacing="10">
+      <Button mnemonicParsing="false" onAction="#actualizarTabla" text="Actualizar tabla" />
+        <Button onAction="#nuevo" text="Nuevo" />
+        <Button fx:id="btonEditar" onAction="#editar" text="Editar" />
+      <Button fx:id="btonEliminar" mnemonicParsing="false" onAction="#eliminar" text="Eliminar" />
+      <Button mnemonicParsing="false" onAction="#detalles" text="Ver detalles" />
+        <Button text="Exportar reporte" onAction="#exportarReporte" />
+    </HBox>
+
+</VBox>

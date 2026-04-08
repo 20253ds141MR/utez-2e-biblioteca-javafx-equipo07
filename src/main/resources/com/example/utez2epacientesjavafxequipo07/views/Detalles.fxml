@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" spacing="15" prefHeight="400.0" prefWidth="400.0"
+      style="-fx-padding: 30;"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.utez2epacientesjavafxequipo07.controllers.DetalleController">
+
+    <Label text="Detalle del Libro" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <Separator />
+
+    <Label fx:id="lblId"        style="-fx-font-size: 14px;" />
+    <Label fx:id="lblTitulo"    style="-fx-font-size: 14px;" />
+    <Label fx:id="lblAutor"     style="-fx-font-size: 14px;" />
+    <Label fx:id="lblAnio"      style="-fx-font-size: 14px;" />
+    <Label fx:id="lblGenero"    style="-fx-font-size: 14px;" />
+    <Label fx:id="lblDisponible" style="-fx-font-size: 14px;" />
+
+    <Separator />
+
+    <Button text="Regresar" onAction="#cerrar"
+            style="-fx-font-size: 13px; -fx-padding: 6 20;" />
+
+</VBox>

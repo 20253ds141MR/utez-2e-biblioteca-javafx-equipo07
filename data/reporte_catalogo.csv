@@ -1,3 +1,4 @@
+ID,Titulo,Autor,Anio,Genero,Disponible
 ISBN001,Cien Años de Soledad,Gabriel García Márquez,1967,Ficción,true
 ISBN002,El Principito,Antoine de Saint-Exupéry,1943,Infantil,true
 ISBN003,1984,George Orwell,1949,Distopía,false
