@@ -2,7 +2,6 @@ package com.example.utez2epacientesjavafxequipo07.services;
 
 import com.example.utez2epacientesjavafxequipo07.model.Libro;
 import com.example.utez2epacientesjavafxequipo07.repositories.BooksFileRepository;
-import com.example.utez2epacientesjavafxequipo07.repositories.BooksFileRepository;
 
 import javax.swing.text.StyledEditorKit;
 import java.io.IOException;
@@ -15,10 +14,11 @@ public class BooksService {
 
     BooksFileRepository repo = new BooksFileRepository();
 
-    //Logica de negocio (EXAMEN)
+    //Logica de negocio
     public List<Libro> getLibros() throws IOException{
         List<String> lines = repo.readAllLines();
         List<Libro> libros = new ArrayList<>();
+
 
        for(int i = 0; i < lines.size(); i++){
            String line = lines.get(i);
@@ -26,7 +26,7 @@ public class BooksService {
            continue;
            }
 
-           String[] split = line.split(";");
+           String[] split = line.split(",");
            if(split.length<6) continue;
 
            libros.add(new Libro(
@@ -57,28 +57,47 @@ public class BooksService {
 
     }
 
-  public void updateLibro(int index, String id, String titulo, String autor, int anio, String genero, boolean disponible) throws IOException{
-
-        validate(id,titulo,autor,anio);
+    public void updateLibro(
+            Libro libro,
+            String id,
+            String titulo,
+            String autor,
+            int anio,
+            String genero,
+            boolean disponible
+    ) throws IOException {
 
         List<String> data = getCleanLines();
-        if(index < 0 || index >= data.size()){
-            throw new IllegalArgumentException("inválido");
+
+        int index = -1;
+
+        for (int i = 0; i < data.size(); i++) {
+            String[] parts = data.get(i).split(",");
+            if (parts[0].equals(libro.getId())) {
+                index = i;
+                break;
+            }
         }
 
-       String lineaActualizada = id + "," + titulo + "," + autor +"," + anio + "," + genero + "," + disponible;
-        data.set(index + 1, lineaActualizada);
+        if (index == -1) {
+            throw new IllegalArgumentException("Libro no encontrado");
+        }
 
+        String lineaActualizada =
+                id + "," + titulo + "," + autor + "," + anio + "," + genero + "," + disponible;
+
+        data.set(index, lineaActualizada);
         repo.saveFile(data);
-  }
+    }
 
-  public void deleteLibro(int index) throws IOException{
+
+    public void deleteLibro(int index) throws IOException{
         List<String> data = getCleanLines();
         if(index < 0 || index >= data.size()){
             throw new IllegalArgumentException("inválido");
         }
 
-        data.remove(index + 1);
+        data.remove(index);
         repo.saveFile(data);
   }
 

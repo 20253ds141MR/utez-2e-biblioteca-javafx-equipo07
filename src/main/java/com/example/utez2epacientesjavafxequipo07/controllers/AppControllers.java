@@ -2,19 +2,18 @@ package com.example.utez2epacientesjavafxequipo07.controllers;
 
 import com.example.utez2epacientesjavafxequipo07.model.Libro;
 import com.example.utez2epacientesjavafxequipo07.services.BooksService;
-import javafx.beans.Observable;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 
-import java.awt.print.Book;
 import java.io.IOException;
-import java.util.List;
 
 
 public class AppControllers {
@@ -29,35 +28,46 @@ public class AppControllers {
    @FXML private TableColumn<Libro,String> colGenero;
    @FXML private TableColumn<Libro,Boolean> colDisponible;
 
-   @FXML private TextField txtID;
-   @FXML private TextField txtTitulo;
-   @FXML private TextField txtAutor;
-   @FXML private TextField txtAnio;
-   @FXML private TextField txtGenero;
-   @FXML private CheckBox chkDisponible;
-   @FXML private ObservableList<Libro> listaLibros;
-
-    @FXML
-    private ObservableList<String> parts =FXCollections.observableArrayList();
+   @FXML private Button btonEditar;
+   @FXML private Button btonEliminar;
 
 
-    private BooksService service = new BooksService();
+   private ObservableList<Libro> listaLibros;
+   private final BooksService service = new BooksService();
+
     @FXML
     public void initialize() throws IOException {
+        //Utilización de lambdas para la visualización de libros en el ListView
         try {
-            colID.setCellValueFactory(new PropertyValueFactory<>("id"));
-            colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
-            colAutor.setCellValueFactory(new PropertyValueFactory<>("autor"));
-            colAnio.setCellValueFactory(new PropertyValueFactory<>("anio"));
-            colGenero.setCellValueFactory(new PropertyValueFactory<>("genero"));
-            colDisponible.setCellValueFactory(new PropertyValueFactory<>("disponible"));
+            colID.setCellValueFactory(c ->
+                    new javafx.beans.property.SimpleStringProperty(c.getValue().getId()));
+
+            colTitulo.setCellValueFactory(c ->
+                    new javafx.beans.property.SimpleStringProperty(c.getValue().getTitulo()));
+
+            colAutor.setCellValueFactory(c ->
+                    new javafx.beans.property.SimpleStringProperty(c.getValue().getAutor()));
+
+            colAnio.setCellValueFactory(c ->
+                    new javafx.beans.property.SimpleIntegerProperty(
+                            c.getValue().getAnio()
+                    ).asObject());
+
+            colGenero.setCellValueFactory(c ->
+                    new javafx.beans.property.SimpleStringProperty(c.getValue().getGenero()));
+
+            colDisponible.setCellValueFactory(c ->
+                    new javafx.beans.property.SimpleBooleanProperty(
+                            c.getValue().isDisponible()
+                    ).asObject());
 
             listaLibros = FXCollections.observableArrayList(service.getLibros());
             tablaLibros.setItems(listaLibros);
 
-            configurarSeleccionTabla();
 
             tablaLibros.setPlaceholder(new Label("No se encontro el libro"));
+
+            configurarSeleccionTabla();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,116 +82,138 @@ public class AppControllers {
 
 
     @FXML
-    public void editar() {
-        try{
-           int index = tablaLibros.getSelectionModel().getSelectedIndex();
+    public void editar()  {
 
-           if(index < 0){
-           mostrarMensaje("Selecciona un libro", "purple");
-           return;
-           }
+        try {
+            Libro seleccionado = tablaLibros.getSelectionModel().getSelectedItem();
+            if (seleccionado == null) return;
 
-           String id = txtID.getText();
-            String titulo = txtTitulo.getText();
-            String autor = txtAutor.getText();
-            String genero = txtGenero.getText();
-            int anio = Integer.parseInt(txtAnio.getText());
-            boolean disponible = chkDisponible.isSelected();
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/com/example/utez2epacientesjavafxequipo07/views/formulario.fxml"
+                    )
+            );
+            Parent root = loader.load();
 
-            service.updateLibro(index,id,titulo,autor,anio,genero,disponible);
+            FormularioController controller = loader.getController();
+            controller.setLibro(seleccionado);
+
+            Stage stage = new Stage();
+            stage.setTitle("Editar libro");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
             cargarTabla();
-            limpiar();
-            mostrarMensaje("Libro actualizado", "green");
-        } catch (Exception e){
-            mostrarMensaje("Error al editar", "red");
-        }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        private void cargarFormulario(Libro libro){
-        txtID.setText(libro.getId());
-        txtTitulo.setText(libro.getTitulo());
-        txtAutor.setText(libro.getAutor());
+    }
 
-        txtAnio.setText(String.valueOf(libro.getAnio()));
-        txtGenero.setText(String.valueOf(libro.getGenero()));
-        chkDisponible.setSelected(libro.isDisponible());
-        }
-
-        private void configurarSeleccionTabla(){
-        tablaLibros.getSelectionModel().selectedItemProperty().addListener((obs, libroAnterior, libroSeleccionado) -> {
-            if(libroSeleccionado !=null){
-                cargarFormulario(libroSeleccionado);
-            }
-            });
-        }
 
     @FXML
     public void nuevo() {
         try {
-            String id = txtID.getText();
-            String titulo = txtTitulo.getText();
-            String autor = txtAutor.getText();
-            String genero = txtGenero.getText();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/utez2epacientesjavafxequipo07/views/formulario.fxml"));
+            Parent root = loader.load();
 
-            if (txtAnio.getText().isEmpty()){
-                mostrarMensaje("El año es obligatorio", "red");
-                return;
-            }
+            FormularioController controller = loader.getController();
+            controller.setLibro(null);
 
-            int anio = Integer.parseInt(txtAnio.getText());
-            boolean disponible = chkDisponible.isSelected();
+            Stage stage = new Stage();
+            stage.setTitle("Nuevo libro");
+            stage.setScene(new Scene(root));
 
-            service.addLibro(id,titulo,autor,anio,genero,disponible);
-            listaLibros.setAll(service.getLibros());
-            limpiar();
-            mostrarMensaje("Libro agregadoo", "green");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
 
-
-        } catch (Exception e){
+            cargarTabla();
+        } catch (Exception e) {
             e.printStackTrace();
-            mostrarMensaje("Error al agregar", "red");
         }
     }
 
     @FXML
     public void eliminar(){
-        try{
-            int index =  tablaLibros.getSelectionModel().getSelectedIndex();
-            if(index < 0){
-                mostrarMensaje("Selecciona un libro", "orange");
+
+        try {
+            int index = tablaLibros.getSelectionModel().getSelectedIndex();
+            if (index < 0) return;
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmar eliminación");
+            alert.setHeaderText("¿Eliminar libro?");
+            alert.setContentText("Esta acción no se puede deshacer.");
+
+            if (alert.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
                 return;
             }
 
-
             service.deleteLibro(index);
             cargarTabla();
-            limpiar();
-            mostrarMensaje("Libro eliminado", "orange");
+
+            btonEditar.setDisable(true);
+            btonEliminar.setDisable(true);
 
         } catch (Exception e) {
-            mostrarMensaje("Error, intente de nuevo", "red");
+            e.printStackTrace();
         }
+
     }
 
+    @FXML
+    private void detalles(){
+        try{
+            Libro seleccionado = tablaLibros.getSelectionModel().getSelectedItem();
+            if (seleccionado == null){
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/utez2epacientesjavafxequipo07/views/Detalles.fxml"));
+            Parent root = loader.load();
+            DetalleController controller = loader.getController();
+            controller.setLibro(seleccionado);
+
+            Stage stage = new Stage();
+            stage.setTitle("Detalles de libro");
+            stage.setScene(new Scene(root));
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void cargarTabla(){
         try {
-            ObservableList<Libro> listaLibros = FXCollections.observableArrayList(service.getLibros());
-            tablaLibros.setItems(listaLibros);
+            listaLibros.setAll(service.getLibros());
 
         } catch (Exception e){
             lblMsg.setText("Error al cargar tabla");
+            e.printStackTrace();
         }
     }
 
+    private void configurarSeleccionTabla(){
+        btonEditar.setDisable(true);
+        btonEliminar.setDisable(true);
 
-    private void limpiar(){
-        txtID.clear();
-        txtTitulo.clear();
-        txtAutor.clear();
-        txtAnio.clear();
-        txtGenero.clear();
-        chkDisponible.setSelected(false);
+        tablaLibros.getSelectionModel().selectedItemProperty().addListener((obs,anterior,seleccionado)->{
+            boolean haySeleccion = seleccionado != null;
+
+            btonEditar.setDisable(!haySeleccion);
+            btonEliminar.setDisable(!haySeleccion);
+        });
+    }
+
+
+
+    @FXML
+    private void actualizarTabla(){
+        cargarTabla();
     }
 }
 
