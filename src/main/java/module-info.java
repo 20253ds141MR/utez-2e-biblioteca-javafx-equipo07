@@ -1,6 +1,7 @@
 module com.example.utez2epacientesjavafxequipo07 {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.desktop;
 
 
     opens com.example.utez2epacientesjavafxequipo07 to javafx.fxml;
