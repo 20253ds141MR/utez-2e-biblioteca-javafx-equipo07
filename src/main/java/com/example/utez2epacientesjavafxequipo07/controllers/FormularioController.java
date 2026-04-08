@@ -4,6 +4,7 @@ import com.example.utez2epacientesjavafxequipo07.model.Libro;
 import com.example.utez2epacientesjavafxequipo07.services.BooksService;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -15,6 +16,7 @@ public class FormularioController {
     @FXML private TextField txtAnio;
     @FXML private TextField txtGenero;
     @FXML private CheckBox checkDisponible;
+    @FXML private Label lblError;
 
     private Libro libro;
     private final BooksService service = new BooksService();
@@ -47,17 +49,20 @@ public class FormularioController {
                     txtGenero.getText(),
                     checkDisponible.isSelected()
             );
-
-          cerrarVentana();
-
-        }  catch (Exception e){
+            cerrarVentana();
+        } catch (NumberFormatException e) {
+            lblError.setText("El año debe ser un número válido.");
+        } catch (IllegalArgumentException e) {
+            lblError.setText(e.getMessage());
+        } catch (Exception e) {
+            lblError.setText("Error al guardar el libro.");
             e.printStackTrace();
         }
     }
 
 
     @FXML
-    private void guardar() throws Exception {
+    private void guardar() {
         try {
             if (libro == null) return;
             service.updateLibro(
@@ -70,18 +75,17 @@ public class FormularioController {
                     checkDisponible.isSelected()
             );
             cerrarVentana();
+        } catch (NumberFormatException e) {
+            lblError.setText("El año debe ser un número válido.");
+        } catch (IllegalArgumentException e) {
+            lblError.setText(e.getMessage());
         } catch (Exception e) {
+            lblError.setText("Error al actualizar el libro.");
             e.printStackTrace();
         }
     }
 
 
-
-    @FXML
-    private void cerrar() {
-        Stage stage = (Stage) txtId.getScene().getWindow();
-        stage.close();
-    }
 
     @FXML
     private void cerrarVentana(){

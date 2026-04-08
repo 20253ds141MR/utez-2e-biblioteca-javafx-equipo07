@@ -3,7 +3,6 @@ package com.example.utez2epacientesjavafxequipo07.services;
 import com.example.utez2epacientesjavafxequipo07.model.Libro;
 import com.example.utez2epacientesjavafxequipo07.repositories.BooksFileRepository;
 
-import javax.swing.text.StyledEditorKit;
 import java.io.IOException;
 import java.time.Year;
 import java.util.ArrayList;
@@ -67,6 +66,7 @@ public class BooksService {
             boolean disponible
     ) throws IOException {
 
+        validate(id, titulo, autor, anio);
         List<String> data = getCleanLines();
 
         int index = -1;
@@ -75,7 +75,8 @@ public class BooksService {
             String[] parts = data.get(i).split(",");
             if (parts[0].equals(libro.getId())) {
                 index = i;
-                break;
+            } else if (parts[0].equals(id)) {
+                throw new IllegalArgumentException("El ID ya existe en otro libro");
             }
         }
 

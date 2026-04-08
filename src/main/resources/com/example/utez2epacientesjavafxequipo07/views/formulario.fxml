@@ -37,6 +37,7 @@
             <TextField fx:id="txtGenero" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
+      <Label fx:id="lblError" style="-fx-text-fill: red; -fx-padding: 4;" />
       <ButtonBar prefHeight="40.0" prefWidth="200.0">
         <buttons>
           <Button mnemonicParsing="false" onAction="#agregar" text="Agregar" />
